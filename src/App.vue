@@ -8,7 +8,7 @@
       class="toolbar montserrat-toolbar"
     >
       <v-toolbar-title class="toolbar-title">
-        <router-link to="/" class="toolbar-link title-link">Chuthamt</router-link>
+        <router-link to="/" class="toolbar-link title-link pixelify-title">Chuthamt</router-link>
       </v-toolbar-title>
 
       <v-spacer />
@@ -19,9 +19,6 @@
       <v-btn text class="toolbar-link" to="/about">
         About
       </v-btn>
-      <v-btn text class="toolbar-link" to="/skill">
-        Skills
-      </v-btn>
       <v-btn text class="toolbar-link" to="/contact">
         Contact
       </v-btn>
@@ -29,16 +26,7 @@
 
     <v-main>
       <router-view />
-      <div class="information-section">
-        <v-btn @click="show = !show" class="mt-4 center" >
-          View
-        </v-btn>
-        <v-if v-if="show">
-          <p class="text-center" v-for="(item, index) in items" :key="index">
-            {{ item.message }}
-          </p>
-        </v-if>
-      </div>
+
     </v-main>
   </v-app>
 </template>
@@ -46,21 +34,11 @@
 <script>
 export default {
   name: 'App',
-  data() {
-    return {
-      name: 'Chuthamat Buaban',
-      show: true,
-      items: [
-        { message: 'Basic Vue Workshop' },
-        { message: 'Vuetify Workshop' }
-      ]
-    }
-  }
 }
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Pixelify+Sans:wght@400..700&display=swap');
 
 html, body, #app, .container-app {
   font-family: "Montserrat", sans-serif;
@@ -97,5 +75,17 @@ html, body, #app, .container-app {
   color: #222831 !important;
   text-decoration: none;
   font-weight: 700;
+}
+.pixelify-title {
+  font-family: "Pixelify Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+  font-size: 24px !important;
+  letter-spacing: 1px;
+}
+.information-section-btn {
+  display: flex;
+  align-items: center;
 }
 </style>
