@@ -8,25 +8,24 @@
       class="toolbar montserrat-toolbar"
     >
       <v-toolbar-title class="toolbar-title">
-        <router-link to="/" class="toolbar-link title-link pixelify-title">Chuthamt</router-link>
+        <router-link to="/" class="toolbar-link title-link pixelify-title">Chuthamat</router-link>
       </v-toolbar-title>
 
       <v-spacer />
 
-      <v-btn text class="toolbar-link" to="/home">
+      <v-btn text class="toolbar-link" to="/">
         Home
       </v-btn>
-      <v-btn text class="toolbar-link" to="/about">
-        About
+      <v-btn text class="toolbar-link" to="/education">
+        Education
       </v-btn>
-      <v-btn text class="toolbar-link" to="/contact">
-        Contact
+      <v-btn text class="toolbar-link" to="/hobbie">
+        Hobbies
       </v-btn>
     </v-app-bar>
 
     <v-main>
       <router-view />
-
     </v-main>
   </v-app>
 </template>

@@ -1,58 +1,136 @@
 <template>
-	<main class="hero-section">
-		<header>
-			<h1 class="display-1 font-weight-bold mb-4">Welcome to My Portfolio</h1>
-			<h4>I am Chuthamat Buaban (Praew) - Frontend (Focus)</h4>
-			<h4 class="subheading font-weight-bold mb-4">INET Innovation Hub - Nakhon Ratchasima</h4>
-		</header>
-		<hero />
-		<aside class="education-section">
-			<h2 class="title font-weight-bold mb-2">Education</h2>
-			<ul>
-				<li>Bachelor of Engineering in Electrical Engineering | Major: Power and Electronics</li>
-				<li>Ubon Ratchathani University, Thailand</li>
-			</ul>
-		</aside>
-		<aside>
-			<h2 class="title font-weight-bold mb-2 mt-2">Hobbies</h2>
-			<ul class="hobby-list">
-				<li>Reading a book (Fiction, Non-Fiction, Self-Development)</li>
-				<li>Playing Guitar</li>
-				<li>Drinking Coffee and Matcha</li>
-			</ul>
-		</aside>
-		<article>
-			<hobbie/>
-		</article>
-		<section class="mt-2">
-			<h2>Like</h2>
-			<ul>
-				<li>Flower - Lily</li>
-				<li>Nature green forest</li>
-				<li>Cat</li>
-				<li>Dog</li>
-			</ul>
-		</section>
-	</main>
+  <div>
+    <profile-content />
+    <aside class="hobbies-section">
+      <div class="section-header">
+        <img
+          src="@/assets/icons8-pixel-heart-48.png"
+          alt="heart"
+          class="section-icon"
+        />
+        <h2 class="title font-weight-bold mb-2 mt-2">Hobbies</h2>
+      </div>
+      <ul class="hobby-list">
+        <li>Reading a book (Fiction, Non-Fiction, Self-Development)</li>
+        <li>Playing Guitar</li>
+        <li>Drinking Coffee and Matcha</li>
+      </ul>
+    </aside>
+    <article>
+      <h4>Books recommanded</h4>
+      <hobbie />
+    </article>
+    <section class="mt-6 likes-section">
+      <div class="section-header">
+        <img
+          src="@/assets/icons8-pixel-cat-48.png"
+          alt="cat"
+          class="section-icon"
+        />
+        <h4>Things I Like</h4>
+      </div>
+      <ul>
+        <li>Flower - Lily</li>
+        <li>Nature green forest</li>
+        <li>Cat, Dog</li>
+      </ul>
+    </section>
+    <section class="dislikes-section">
+      <h4>Don't Like</h4>
+      <ul>
+        <li>Soy milk</li>
+        <li>Sneak</li>
+      </ul>
+    </section>
+  </div>
 </template>
 
 <script>
-	import Hero from '@/components/Hero.vue';
-	import Hobbie from '@/components/Hobbie.vue';
-	export default {
-		name: 'Home',
-		components: {
-			Hero,
-			Hobbie
-		},
-	}
+import Hobbie from "@/components/Hobbie.vue";
+import ProfileContent from "@/components/ProfileContent.vue";
+
+export default {
+  name: "Home",
+  components: {
+    Hobbie,
+    ProfileContent,
+  },
+};
 </script>
 
-<style>
-	.hero-section {
-		text-align: left;
-		max-width: 900px;
-		margin: 50px auto;
-		padding: 50px 20px;
-	}
+<style scoped>
+.header-with-icon {
+  margin-bottom: 20px;
+}
+
+.header-with-icon h4 {
+  font-weight: 400;
+  font-size: medium;
+}
+
+.header-icon {
+  width: 48px;
+  height: 48px;
+  animation: float 3s ease-in-out infinite;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+.section-icon {
+  width: 40px;
+  height: 40px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.hobbies-section {
+  margin: 30px 0;
+  padding: 20px;
+  background-color: rgba(249, 178, 215, 0.15);
+  border-radius: 8px;
+  border-left: 4px solid #f9b2d7;
+}
+
+.likes-section {
+  margin: 30px 0;
+  padding: 20px;
+  background-color: rgba(207, 236, 243, 0.15);
+  border-radius: 8px;
+  border-left: 4px solid #cfecf3;
+}
+
+.dislikes-section {
+  margin: 30px 0;
+  padding: 20px;
+  background-color: rgba(246, 255, 220, 0.2);
+  border-radius: 8px;
+  border-left: 4px solid #f6ffdc;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.title {
+  margin: 0;
+}
+
+ul {
+  list-style-position: inside;
+  line-height: 1.8;
+}
+
+li {
+  margin: 8px 0;
+}
 </style>
