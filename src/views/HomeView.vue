@@ -59,15 +59,6 @@ export default {
 </script>
 
 <style scoped>
-.header-with-icon {
-  margin-bottom: 20px;
-}
-
-.header-with-icon h4 {
-  font-weight: 400;
-  font-size: medium;
-}
-
 .header-icon {
   width: 48px;
   height: 48px;

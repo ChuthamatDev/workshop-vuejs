@@ -1,5 +1,5 @@
 <template>
-  <main>
+  <div>
     <header class="header-with-icon">
       <h1 class="display-1 font-weight-bold mb-4">Welcome to My Portfolio</h1>
       <h4>I am Chuthamat Buaban (Praew) - Frontend (Focus)</h4>
@@ -25,7 +25,7 @@
       <h4>Books recommanded</h4>
       <Hobbie />
     </article>
-  </main>
+  </div>
 </template>
 
 <script>
@@ -41,4 +41,42 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.header-icon {
+  width: 48px;
+  height: 48px;
+  animation: float 3s ease-in-out infinite;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+.section-icon {
+  width: 40px;
+  height: 40px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+.hobbies-section {
+  margin: 30px 0;
+  padding: 20px;
+  background-color: rgba(249, 178, 215, 0.15);
+  border-radius: 8px;
+  border-left: 4px solid #f9b2d7;
+}
+
+.title {
+  margin: 0;
+}
+
+ul {
+  list-style-position: inside;
+  line-height: 1.8;
+}
+
+li {
+  margin: 8px 0;
+}
+</style>

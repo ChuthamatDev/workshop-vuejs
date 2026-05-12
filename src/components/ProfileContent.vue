@@ -30,4 +30,13 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.header-with-icon {
+  margin-bottom: 20px;
+}
+
+.header-with-icon h4 {
+  font-weight: 400;
+  font-size: medium;
+}
+</style>
