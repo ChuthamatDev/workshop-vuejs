@@ -53,11 +53,11 @@ body,
   padding: 0 80px;
   margin: 0;
   box-sizing: border-box;
-  background-color: #daf9de;
+  background-color: #5bbdd5;
   min-height: 100vh;
 }
 .toolbar {
-  background-color: #cfecf3 !important;
+  background-color: #5bbdd5 !important;
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
 }
 .montserrat-toolbar {

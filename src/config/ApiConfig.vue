@@ -9,6 +9,11 @@ export default {
         console.log(res);
       });
     },
+    register() {
+      this.post("http://localhost:3000/api/v1/register").then((res) => {
+        console.log(res);
+      });
+    },
   },
 };
 </script>

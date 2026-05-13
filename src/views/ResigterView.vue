@@ -4,10 +4,10 @@
       <v-col cols="12" sm="8" md="8">
         <v-card class="elevation-12">
           <v-toolbar color="primary" dark flat>
-            <v-toolbar-title>Login System</v-toolbar-title>
+            <v-toolbar-title>Register System</v-toolbar-title>
           </v-toolbar>
           <v-card-text>
-            <v-form @submit.prevent="handleLogin" ref="form">
+            <v-form @submit.prevent="handleRegister" ref="form">
               <v-text-field
                 label="Username"
                 name="username"
@@ -40,12 +40,12 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="primary" @click="handleLogin" :loading="loading"
-              >Login</v-btn
+            <v-btn color="primary" @click="handleRegister" :loading="loading"
+              >Register</v-btn
             >
           </v-card-actions>
           <v-card-text>
-            register <router-link to="/resigter">here</router-link>
+            back <router-link to="/login">to login page</router-link>
           </v-card-text>
         </v-card>
       </v-col>
@@ -55,7 +55,7 @@
 
 <script>
 export default {
-  name: "LoginView",
+  name: "ResigterView",
   data() {
     return {
       username: "",
@@ -66,7 +66,7 @@ export default {
     };
   },
   methods: {
-    async handleLogin() {
+    async handleRegister() {
       if (!this.$refs.form.validate()) {
         return;
       }
@@ -76,22 +76,16 @@ export default {
       this.successMessage = "";
 
       try {
-        const response = await this.axios.post("/login", {
+        const response = await this.axios.post("/register", {
           username: this.username,
           password: this.password,
         });
 
-        console.log("Login Response:", response.data);
+        console.log("Register Response:", response.data);
 
-        // Store the token in both cookies and localStorage
-        if (response.data.token) {
-          this.$cookies.set("user_token", response.data.token, "1d");
-          localStorage.setItem("user_token", response.data.token);
-        }
-
-        this.successMessage = "Login successful!";
+        this.successMessage = "Register successful!";
       } catch (error) {
-        console.error("Login API Error:", error);
+        console.error("Register API Error:", error);
 
         if (
           error.response &&
@@ -101,7 +95,7 @@ export default {
           this.errorMessage = error.response.data.message;
         } else {
           this.errorMessage =
-            "Login failed. Please check your credentials or API connection.";
+            "Register failed. Please check your connection.";
         }
       } finally {
         this.loading = false;
