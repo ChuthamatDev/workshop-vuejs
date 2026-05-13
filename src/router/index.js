@@ -29,20 +29,35 @@ const routes = [
         name: "about",
         component: () => import("../views/AboutView.vue"),
       },
-      {
-        path: "/api",
-        name: "api",
-        component: () => import("../views/APIView.vue"),
-      },
+      // {
+      //   path: "/api",
+      //   name: "api",
+      //   component: () => import("../views/APIView.vue"),
+      // },
       {
         path: "/login",
         name: "login",
-        component: () => import("../views/LoginView.vue"),
+        component: () => import("../views/auth/LoginView.vue"),
       },
       {
         path: "/resigter",
         name: "resigter",
-        component: () => import("../views/ResigterView.vue"),
+        component: () => import("../views/auth/ResigterView.vue"),
+      },
+      {
+        path: "/product",
+        name: "product",
+        component: () => import("../views/ProductView.vue"),
+      },
+      {
+        path: "/login-admin",
+        name: "login-admin",
+        component: () => import("../views/auth/LoginAdminView.vue"),
+      },
+      {
+        path: "/user",
+        name: "user",
+        component: () => import("../views/auth/UserView.vue"),
       },
     ],
   },

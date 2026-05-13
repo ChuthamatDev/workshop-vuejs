@@ -14,8 +14,9 @@
       <!-- <v-btn text class="toolbar-link" to="/education"> Education </v-btn>
       <v-btn text class="toolbar-link" to="/hobbie"> Hobbies </v-btn> -->
       <v-btn text class="toolbar-link" to="/about"> About </v-btn>
-      <v-btn text class="toolbar-link" to="/api"> APIs </v-btn>
-      <div class="toolbar-email" v-if="email">{{ email }}</div>
+      <!-- <v-btn text class="toolbar-link" to="/api"> APIs </v-btn> -->
+      <!-- <div class="toolbar-email" v-if="email">{{ email }}</div> -->
+      <v-btn text class="toolbar-link" to="/login">SignIn</v-btn>
     </v-app-bar>
 
     <!-- การเรียกใช้ Router -->

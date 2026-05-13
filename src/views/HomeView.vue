@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <main>
     <cards />
-    <aside class="hobbies-section">
+    <div class="hobbies-section">
       <div class="section-header">
         <img
           src="@/assets/icons8-pixel-heart-48.png"
@@ -15,11 +15,11 @@
         <li>Playing Guitar</li>
         <li>Drinking Coffee and Matcha</li>
       </ul>
-    </aside>
-    <article>
+    </div>
+    <div>
       <h4>Books recommanded</h4>
       <hobbie />
-    </article>
+    </div>
     <section class="mt-6 likes-section">
       <div class="section-header">
         <img
@@ -42,7 +42,7 @@
         <li>Sneak</li>
       </ul>
     </section>
-  </div>
+  </main>
 </template>
 
 <script>

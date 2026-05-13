@@ -4,10 +4,10 @@
       <v-col cols="12" sm="8" md="8">
         <v-card class="elevation-12">
           <v-toolbar color="primary" dark flat>
-            <v-toolbar-title>Login System</v-toolbar-title>
+            <v-toolbar-title>Login Admin System</v-toolbar-title>
           </v-toolbar>
           <v-card-text>
-            <v-form @submit.prevent="handleLogin" ref="form">
+            <v-form @submit.prevent="handleLoginAdmin" ref="form">
               <v-text-field
                 label="Username"
                 name="username"
@@ -40,13 +40,10 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="primary" @click="handleLogin" :loading="loading"
+            <v-btn color="primary" @click="handleLoginAdmin" :loading="loading"
               >Login</v-btn
             >
           </v-card-actions>
-          <v-card-text>
-            register <router-link to="/resigter">here</router-link>
-          </v-card-text>
         </v-card>
       </v-col>
     </v-row>
@@ -55,18 +52,19 @@
 
 <script>
 export default {
-  name: "LoginView",
+  name: "LoginAdminView",
   data() {
     return {
       username: "",
       password: "",
+      role: "admin",
       errorMessage: "",
       successMessage: "",
       loading: false,
     };
   },
   methods: {
-    async handleLogin() {
+    async handleLoginAdmin() {
       if (!this.$refs.form.validate()) {
         return;
       }
@@ -76,20 +74,22 @@ export default {
       this.successMessage = "";
 
       try {
-        const response = await this.axios.post("/login", {
+        const response = await this.axios.post("/login-admin", {
           username: this.username,
           password: this.password,
+          role: "admin",
         });
 
-        console.log("Login Response:", response.data);
+        console.log("Login Admin Response:", response.data);
 
         // Store the token in both cookies and localStorage
         if (response.data.token) {
-          this.$cookies.set("user_token", response.data.token, "1d");
-          localStorage.setItem("user_token", response.data.token);
+          this.$cookies.set("admin_token", response.data.token, "1d");
+          localStorage.setItem("admin_token", response.data.token);
         }
 
         this.successMessage = "Login successful!";
+        this.$router.push("/user");
       } catch (error) {
         console.error("Login API Error:", error);
 
