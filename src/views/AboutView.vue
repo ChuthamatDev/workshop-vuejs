@@ -1,5 +1,7 @@
 <template>
   <v-sheet class="mx-auto" max-width="300">
+    <h3>Workshop 2</h3>
+    <br />
     <v-form ref="form" @submit.prevent="submit">
       <v-text-field
         v-model="input"

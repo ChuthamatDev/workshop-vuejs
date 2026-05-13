@@ -1,6 +1,6 @@
 <template>
   <div>
-    <header class="header-with-icon">
+    <!-- <header class="header-with-icon">
       <h1 class="display-1 font-weight-bold mb-4">Welcome to My Portfolio</h1>
       <h4>I am Chuthamat Buaban (Praew) - Frontend (Focus)</h4>
       <h4>INET Innovation Hub - Nakhon Ratchasima</h4>
@@ -15,17 +15,19 @@
         </li>
         <li>Ubon Ratchathani University, Thailand</li>
       </ul>
-    </aside>
+    </aside> -->
+    <Cards />
   </div>
 </template>
 
 <script>
-import Hero from "./Hero.vue";
+import Cards from "./Cards.vue";
+// import Hero from "./Hero.vue";
 
 export default {
   name: "ProfileContent",
   components: {
-    Hero,
+    Cards,
   },
 };
 </script>

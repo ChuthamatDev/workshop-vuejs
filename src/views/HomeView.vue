@@ -1,6 +1,6 @@
 <template>
   <div>
-    <profile-content />
+    <cards />
     <aside class="hobbies-section">
       <div class="section-header">
         <img
@@ -46,14 +46,14 @@
 </template>
 
 <script>
+import Cards from "@/components/Cards.vue";
 import Hobbie from "@/components/Hobbie.vue";
-import ProfileContent from "@/components/ProfileContent.vue";
 
 export default {
   name: "Home",
   components: {
     Hobbie,
-    ProfileContent,
+    Cards,
   },
 };
 </script>
