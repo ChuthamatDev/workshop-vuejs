@@ -34,6 +34,11 @@ const routes = [
         name: "api",
         component: () => import("../views/APIView.vue"),
       },
+      {
+        path: "/login",
+        name: "login",
+        component: () => import("../views/LoginView.vue"),
+      },
     ],
   },
 ];

@@ -15,6 +15,7 @@
       <v-btn text class="toolbar-link" to="/hobbie"> Hobbies </v-btn> -->
       <v-btn text class="toolbar-link" to="/about"> About </v-btn>
       <v-btn text class="toolbar-link" to="/api"> APIs </v-btn>
+      <div class="toolbar-email" v-if="email">{{ email }}</div>
     </v-app-bar>
 
     <!-- การเรียกใช้ Router -->
@@ -27,6 +28,11 @@
 <script>
 export default {
   name: "App",
+  computed: {
+    email() {
+      return this.$store.state.email;
+    },
+  },
 };
 </script>
 
@@ -79,6 +85,11 @@ body,
   font-style: normal;
   font-size: 24px !important;
   letter-spacing: 1px;
+}
+.toolbar-email {
+  color: #222831;
+  font-size: 0.95rem;
+  margin-left: 16px;
 }
 .information-section-btn {
   display: flex;
