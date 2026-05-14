@@ -15,21 +15,21 @@ Vue.use(VueCookies);
 axios.defaults.baseURL = process.env.VUE_APP_API_URL;
 axios.interceptors.request.use(
   (config) => {
-    const token = VueCookies.get("user_token");
-    const token_admin = VueCookies.get("admin_token");
+    const userToken = VueCookies.get("user_token");
+    const adminToken = VueCookies.get("admin_token");
 
-    if (token) {
-      config.headers["Authorization"] = `Bearer ${token}`;
+    const isAdminRoute =
+      config.url.includes("/admin") || config.url.includes("/users");
+
+    if (isAdminRoute && adminToken) {
+      config.headers["Authorization"] = `Bearer ${adminToken}`;
+    } else if (userToken) {
+      config.headers["Authorization"] = `Bearer ${userToken}`;
     }
 
-    if (token_admin) {
-      config.headers["Authorization"] = `Bearer ${token_admin}`;
-    }
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  },
+  (error) => Promise.reject(error),
 );
 
 Vue.use(VueAxios, axios);

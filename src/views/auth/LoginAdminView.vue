@@ -84,7 +84,7 @@ export default {
 
         // Store the token in both cookies and localStorage
         if (response.data.token) {
-          this.$cookies.set("admin_token", response.data.token, "1d");
+          this.$cookies.set("admin_token", response.data.token, "1h");
           localStorage.setItem("admin_token", response.data.token);
         }
 

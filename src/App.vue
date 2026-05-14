@@ -1,7 +1,6 @@
 <template>
   <v-app class="container-app">
     <v-app-bar app flat elevate-on-scroll class="toolbar montserrat-toolbar">
-      <!-- Toolbar -->
       <v-toolbar-title class="toolbar-title">
         <router-link to="/" class="toolbar-link title-link pixelify-title"
           >Chuthamat</router-link
@@ -11,15 +10,11 @@
       <v-spacer />
 
       <v-btn text class="toolbar-link" to="/"> Home </v-btn>
-      <!-- <v-btn text class="toolbar-link" to="/education"> Education </v-btn>
-      <v-btn text class="toolbar-link" to="/hobbie"> Hobbies </v-btn> -->
       <v-btn text class="toolbar-link" to="/about"> About </v-btn>
-      <!-- <v-btn text class="toolbar-link" to="/api"> APIs </v-btn> -->
-      <!-- <div class="toolbar-email" v-if="email">{{ email }}</div> -->
-      <v-btn text class="toolbar-link" to="/login">SignIn</v-btn>
+      <v-btn text class="toolbar-link" to="/login">Shop</v-btn>
+      <v-btn text class="toolbar-link" to="/order">Order</v-btn>
     </v-app-bar>
 
-    <!-- การเรียกใช้ Router -->
     <v-main>
       <router-view />
     </v-main>
@@ -71,11 +66,11 @@ body,
   font-weight: 400;
 }
 .toolbar-link {
-  color: #222831 !important;
+  color: white !important;
   text-transform: none;
 }
 .title-link {
-  color: #222831 !important;
+  color: white !important;
   text-decoration: none;
   font-weight: 700;
 }

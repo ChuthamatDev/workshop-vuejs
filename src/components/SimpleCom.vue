@@ -7,7 +7,7 @@
 
 <script>
 export default {
-  props: ['send_dialog'],
+  props: ["send_dialog"],
   data() {
     return {};
   },

@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div>
     <header class="header-with-icon">
       <h1 class="display-1 font-weight-bold mb-4">Welcome to My Portfolio</h1>
@@ -28,4 +28,4 @@ export default {
     Hero,
   },
 };
-</script>
+</script> -->

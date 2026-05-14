@@ -3,7 +3,6 @@
     <div class="user-approve-contant">
       <h2 class="mb-4">User Management (Approve)</h2>
 
-      <!-- Filter buttons to switch between All, Pending, Approved -->
       <v-btn-toggle v-model="statusFilter" mandatory class="mb-4">
         <v-btn value="all">All</v-btn>
         <v-btn value="pending">Pending</v-btn>
@@ -18,7 +17,6 @@
         :loading="loading"
         loading-text="Loading... Please wait"
       >
-        <!-- Custom formatting for status column -->
         <template v-slot:[`item.status`]="{ item }">
           <v-chip
             :color="item.status === 'approved' ? 'green' : 'orange'"
@@ -29,7 +27,6 @@
           </v-chip>
         </template>
 
-        <!-- Custom formatting for actions column -->
         <template v-slot:[`item.actions`]="{ item }">
           <v-btn
             v-if="item.status !== 'approved'"
@@ -51,7 +48,7 @@ export default {
   data() {
     return {
       loading: false,
-      statusFilter: "all", // "all", "pending", "approved"
+      statusFilter: "all", // "all", "pending", "approved","rejected"
       headers: [
         { text: "Username", align: "start", value: "username" },
         { text: "Role", value: "role" },
@@ -76,7 +73,7 @@ export default {
     async fetchUsers() {
       this.loading = true;
       try {
-        const response = await this.axios.get("/users"); // ลบ headers ออกได้เลย
+        const response = await this.axios.get("/users");
 
         let usersData = response.data;
         if (response.data && response.data.data) {

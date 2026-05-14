@@ -13,7 +13,7 @@ export default {
 <style>
 .hero-section {
   text-align: left;
-  max-width: 800px;
-  margin: 50px auto;
+  max-width: 900px;
+  margin: 40px auto;
 }
 </style>

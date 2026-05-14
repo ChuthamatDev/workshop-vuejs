@@ -85,11 +85,12 @@ export default {
 
         // Store the token in both cookies and localStorage
         if (response.data.token) {
-          this.$cookies.set("user_token", response.data.token, "1d");
+          this.$cookies.set("user_token", response.data.token, "1h");
           localStorage.setItem("user_token", response.data.token);
         }
 
         this.successMessage = "Login successful!";
+        this.$router.push("/product");
       } catch (error) {
         console.error("Login API Error:", error);
 

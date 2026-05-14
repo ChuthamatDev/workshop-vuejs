@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div>
     <header class="header-with-icon">
       <h1 class="display-1 font-weight-bold mb-4">Welcome to My Portfolio</h1>
@@ -79,4 +79,4 @@ ul {
 li {
   margin: 8px 0;
 }
-</style>
+</style> -->
