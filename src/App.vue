@@ -10,7 +10,7 @@
       <v-spacer />
 
       <v-btn text class="toolbar-link" to="/"> Home </v-btn>
-      <v-btn text class="toolbar-link" to="/about"> About </v-btn>
+      <v-btn text class="toolbar-link" to="/about"> Workshop 2 </v-btn>
       <v-btn text class="toolbar-link" to="/login">Shop</v-btn>
       <v-btn text class="toolbar-link" to="/order">Order</v-btn>
     </v-app-bar>

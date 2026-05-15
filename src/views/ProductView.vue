@@ -51,7 +51,6 @@
               class="text-body-2 grey--text"
               style="
                 display: -webkit-box;
-                -webkit-line-clamp: 3;
                 -webkit-box-orient: vertical;
                 overflow: hidden;
               "
@@ -64,15 +63,35 @@
           <v-divider class="mx-4" />
 
           <v-card-actions>
-            <v-btn color="primary" dark small @click="addToCart(product)">
-              <v-icon left small>mdi-cart-plus</v-icon>สั่ง
+            <v-btn
+              icon
+              x-small
+              :disabled="getQty(product) <= 1"
+              @click="changeQty(product, -1)"
+              aria-label="ลดจำนวน"
+            >
+              <v-icon small>mdi-minus</v-icon>
             </v-btn>
+
+            <span class="mx-1 text-body-2 font-weight-medium">
+              {{ getQty(product) }}
+            </span>
+
+            <v-btn
+              icon
+              x-small
+              :disabled="getQty(product) >= (product.stock || 99)"
+              @click="changeQty(product, 1)"
+              aria-label="เพิ่มจำนวน"
+            >
+              <v-icon small>mdi-plus</v-icon>
+            </v-btn>
+
             <v-spacer />
-            <v-btn icon small @click="openEdit(product)">
-              <v-icon small color="blue">mdi-pencil</v-icon>
-            </v-btn>
-            <v-btn icon small @click="openDelete(product)">
-              <v-icon small color="red">mdi-trash-can-outline</v-icon>
+
+            <v-btn color="primary" dark small @click="createOrder(product)">
+              <v-icon left small>mdi-cart-plus</v-icon>
+              สั่ง ฿{{ (product.price * getQty(product)).toLocaleString() }}
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -105,21 +124,12 @@
           <v-form ref="form" lazy-validation>
             <v-text-field
               v-model="form.productName"
-              label="ชื่อเมนู"
+              label="ชื่อสินค้า"
               outlined
               dense
-              :rules="[(v) => !!v || 'กรุณาใส่ชื่อเมนู']"
+              :rules="[(v) => !!v || 'กรุณาใส่ชื่อสินค้า']"
               required
             />
-
-            <v-select
-              v-model="form.category"
-              :items="categories"
-              label="หมวดหมู่"
-              outlined
-              dense
-            />
-
             <v-text-field
               v-model="form.price"
               label="ราคา (฿)"
@@ -161,12 +171,7 @@
         <v-card-actions>
           <v-spacer />
           <v-btn text @click="closeDialog">ยกเลิก</v-btn>
-          <v-btn
-            color="deep-purple"
-            dark
-            :loading="saving"
-            @click="saveProduct"
-          >
+          <v-btn color="primary" dark :loading="saving" @click="saveProduct">
             บันทึก
           </v-btn>
         </v-card-actions>
@@ -219,6 +224,7 @@ export default {
       deleting: false,
 
       productsData: [],
+      quantities: {},
 
       dialog: false,
       editMode: false,
@@ -233,8 +239,6 @@ export default {
         description: "",
         image: null,
       },
-
-      categories: ["อาหารจานหลัก", "เครื่องดื่ม", "ของหวาน", "ของทานเล่น"],
 
       snackbar: {
         show: false,
@@ -381,11 +385,6 @@ export default {
       }
     },
 
-    addToCart(product) {
-      // TODO: เชื่อมกับ cart store หรือ API
-      this.showToast(`เพิ่ม "${product.productName}" ลงตะกร้าแล้ว 🛒`);
-    },
-
     resetForm() {
       this.form = {
         productName: "",
@@ -421,6 +420,39 @@ export default {
       if (!path.startsWith("/")) path = "/" + path;
 
       return `http://localhost:3000${path}`;
+    },
+
+    getQty(product) {
+      const id = product._id || product.id;
+      return this.quantities[id] || 1;
+    },
+
+    changeQty(product, delta) {
+      const id = product._id || product.id;
+      const current = this.getQty(product);
+      const max = product.stock || 99;
+      const next = Math.min(Math.max(1, current + delta), max);
+      this.$set(this.quantities, id, next);
+    },
+
+    async createOrder(product) {
+      const productId = product._id || product.id;
+      const quantity = this.getQty(product);
+
+      try {
+        const response = await this.axios.post(
+          `/products/${productId}/orders`,
+          { quantity },
+        );
+        this.showToast(`สั่ง "${product.productName}" x${quantity} สำเร็จ 🛒`);
+
+        this.$set(this.quantities, productId, 1);
+
+        console.log("Order created:", response.data);
+      } catch (error) {
+        console.error("Create Order Error:", error);
+        this.showToast("สั่งซื้อไม่สำเร็จ กรุณาลองใหม่", "error");
+      }
     },
   },
 };
