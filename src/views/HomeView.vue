@@ -39,7 +39,7 @@
       <h4>Don't Like</h4>
       <ul>
         <li>Soy milk</li>
-        <li>Sneak</li>
+        <li>Snake, gecko</li>
       </ul>
     </section>
   </main>
