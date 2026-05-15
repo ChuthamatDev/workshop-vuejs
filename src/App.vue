@@ -1,34 +1,10 @@
 <template>
-  <v-app class="container-app">
-    <v-app-bar app flat elevate-on-scroll class="toolbar montserrat-toolbar">
-      <v-toolbar-title class="toolbar-title">
-        <router-link to="/" class="toolbar-link title-link pixelify-title"
-          >Chuthamat</router-link
-        >
-      </v-toolbar-title>
-
-      <v-spacer />
-
-      <v-btn text class="toolbar-link" to="/"> Home </v-btn>
-      <v-btn text class="toolbar-link" to="/about"> About </v-btn>
-      <v-btn text class="toolbar-link" to="/login">Shop</v-btn>
-      <v-btn text class="toolbar-link" to="/order">Order</v-btn>
-    </v-app-bar>
-
-    <v-main>
-      <router-view />
-    </v-main>
-  </v-app>
+  <router-view />
 </template>
 
 <script>
 export default {
   name: "App",
-  computed: {
-    email() {
-      return this.$store.state.email;
-    },
-  },
 };
 </script>
 

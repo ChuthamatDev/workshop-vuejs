@@ -57,7 +57,6 @@ export default {
     return {
       username: "",
       password: "",
-      role: "admin",
       errorMessage: "",
       successMessage: "",
       loading: false,
@@ -65,44 +64,37 @@ export default {
   },
   methods: {
     async handleLoginAdmin() {
-      if (!this.$refs.form.validate()) {
-        return;
-      }
+      if (!this.$refs.form.validate()) return;
 
       this.loading = true;
       this.errorMessage = "";
       this.successMessage = "";
 
       try {
-        const response = await this.axios.post("/login-admin", {
+        const response = await this.axios.post("/api/v1/login-admin", {
           username: this.username,
           password: this.password,
           role: "admin",
         });
 
-        console.log("Login Admin Response:", response.data);
-
-        // Store the token in both cookies and localStorage
         if (response.data.token) {
-          this.$cookies.set("admin_token", response.data.token, "1h");
-          localStorage.setItem("admin_token", response.data.token);
+          localStorage.setItem("token", response.data.token);
+
+          const userData = response.data.user || {
+            username: this.username,
+            role: "admin",
+          };
+          localStorage.setItem("user", JSON.stringify(userData));
         }
 
         this.successMessage = "Login successful!";
-        this.$router.push("/user");
+
+        this.$router.push({ name: "order-summary" }).catch(() => {});
       } catch (error) {
         console.error("Login API Error:", error);
-
-        if (
-          error.response &&
-          error.response.data &&
-          error.response.data.message
-        ) {
-          this.errorMessage = error.response.data.message;
-        } else {
-          this.errorMessage =
-            "Login failed. Please check your credentials or API connection.";
-        }
+        this.errorMessage =
+          error.response?.data?.message ||
+          "Login failed. Please check your credentials.";
       } finally {
         this.loading = false;
       }

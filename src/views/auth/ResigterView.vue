@@ -76,22 +76,17 @@ export default {
       this.successMessage = "";
 
       try {
-        const response = await this.axios.post("/register", {
+        await this.axios.post("/api/v1/register", {
           username: this.username,
           password: this.password,
         });
 
-        console.log("Register Response:", response.data);
-
         this.successMessage = "Register successful!";
+        this.$router.push({ name: "login" }).catch(() => {});
       } catch (error) {
         console.error("Register API Error:", error);
 
-        if (
-          error.response &&
-          error.response.data &&
-          error.response.data.message
-        ) {
+        if (error.response?.data?.message) {
           this.errorMessage = error.response.data.message;
         } else {
           this.errorMessage = "Register failed. Please check your connection.";

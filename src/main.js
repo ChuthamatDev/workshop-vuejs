@@ -6,30 +6,38 @@ import router from "./router";
 import store from "./store";
 import vuetify from "./plugins/vuetify";
 import VueAxios from "vue-axios";
-import VueCookies from "vue-cookies";
 
 Vue.config.productionTip = false;
-Vue.use(require("vue-cookies"));
-Vue.use(VueCookies);
 
-axios.defaults.baseURL = process.env.VUE_APP_API_URL;
+axios.defaults.baseURL = process.env.VUE_APP_API_URL || "http://localhost:3000";
+
 axios.interceptors.request.use(
   (config) => {
-    const userToken = VueCookies.get("user_token");
-    const adminToken = VueCookies.get("admin_token");
-
-    const isAdminRoute =
-      config.url.includes("/admin") || config.url.includes("/users");
-
-    if (isAdminRoute && adminToken) {
-      config.headers["Authorization"] = `Bearer ${adminToken}`;
-    } else if (userToken) {
-      config.headers["Authorization"] = `Bearer ${userToken}`;
+    const token = localStorage.getItem("token");
+    if (token) {
+      config.headers["Authorization"] = `Bearer ${token}`;
     }
-
     return config;
   },
   (error) => Promise.reject(error),
+);
+
+axios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+
+      if (
+        router.currentRoute.path !== "/login" &&
+        router.currentRoute.path !== "/login-admin"
+      ) {
+        router.push("/login").catch(() => {});
+      }
+    }
+    return Promise.reject(error);
+  },
 );
 
 Vue.use(VueAxios, axios);

@@ -2,7 +2,7 @@
   <v-container>
     <div class="d-flex align-center justify-space-between mb-4">
       <h2 class="text-h5">เมนูอาหาร</h2>
-      <v-btn color="primary" dark @click="openAdd">
+      <v-btn v-if="userRole === 'admin'" color="primary" dark @click="openAdd">
         <v-icon left>mdi-plus</v-icon>เพิ่มเมนู
       </v-btn>
     </div>
@@ -38,11 +38,6 @@
             {{ product.productName || "Product Name" }}
           </v-card-title>
 
-          <v-card-subtitle>
-            <v-chip x-small color="primary" dark class="mt-1">
-              {{ product.category || "Category" }}
-            </v-chip>
-          </v-card-subtitle>
           <v-card-text class="flex-grow-1">
             <div class="text-h6 font-weight-bold green--text mb-1">
               ฿{{ product.price || "0.00" }}
@@ -55,44 +50,59 @@
                 overflow: hidden;
               "
             >
-              {{ product.description || "Product description goes here." }}
+              {{ product.description || "ไม่มีคำอธิบาย" }}
             </div>
             <div class="text-caption mt-2">สต็อก: {{ product.stock || 0 }}</div>
           </v-card-text>
 
           <v-divider class="mx-4" />
 
-          <v-card-actions>
-            <v-btn
-              icon
-              x-small
-              :disabled="getQty(product) <= 1"
-              @click="changeQty(product, -1)"
-              aria-label="ลดจำนวน"
-            >
-              <v-icon small>mdi-minus</v-icon>
-            </v-btn>
+          <v-card-actions class="pa-3">
+            <template v-if="userRole === 'user'">
+              <!-- <v-btn
+                icon
+                small
+                :disabled="getQty(product) <= 1"
+                @click="changeQty(product, -1)"
+              >
+                <v-icon small>mdi-minus</v-icon>
+              </v-btn>
 
-            <span class="mx-1 text-body-2 font-weight-medium">
-              {{ getQty(product) }}
-            </span>
+              <span class="mx-2 text-body-2 font-weight-medium">
+                {{ getQty(product) }}
+              </span>
 
-            <v-btn
-              icon
-              x-small
-              :disabled="getQty(product) >= (product.stock || 99)"
-              @click="changeQty(product, 1)"
-              aria-label="เพิ่มจำนวน"
-            >
-              <v-icon small>mdi-plus</v-icon>
-            </v-btn>
+              <v-btn
+                icon
+                small
+                :disabled="getQty(product) >= (product.stock || 99)"
+                @click="changeQty(product, 1)"
+              >
+                <v-icon small>mdi-plus</v-icon>
+              </v-btn> -->
 
-            <v-spacer />
+              <v-spacer />
 
-            <v-btn color="primary" dark small @click="createOrder(product)">
-              <v-icon left small>mdi-cart-plus</v-icon>
-              สั่ง ฿{{ (product.price * getQty(product)).toLocaleString() }}
-            </v-btn>
+              <v-btn
+                color="primary"
+                dark
+                small
+                @click="handleAddToCart(product)"
+              >
+                <v-icon left small>mdi-cart-plus</v-icon>
+                หยิบใส่ตะกร้า
+              </v-btn>
+            </template>
+
+            <template v-if="userRole === 'admin'">
+              <v-spacer></v-spacer>
+              <v-btn color="blue" text small @click="openEdit(product)">
+                <v-icon left small>mdi-pencil</v-icon> แก้ไข
+              </v-btn>
+              <v-btn color="red" text small @click="openDelete(product)">
+                <v-icon left small>mdi-trash-can-outline</v-icon> ลบ
+              </v-btn>
+            </template>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -119,9 +129,8 @@
         <v-card-title class="text-h6">
           {{ editMode ? "แก้ไขเมนู" : "เพิ่มเมนูใหม่" }}
         </v-card-title>
-
         <v-card-text>
-          <v-form ref="form" lazy-validation>
+          <v-form ref="formRef" lazy-validation>
             <v-text-field
               v-model="form.productName"
               label="ชื่อสินค้า"
@@ -139,7 +148,6 @@
               :rules="[(v) => !!v || 'กรุณาใส่ราคา']"
               required
             />
-
             <v-text-field
               v-model="form.stock"
               label="สต็อก"
@@ -147,7 +155,6 @@
               outlined
               dense
             />
-
             <v-textarea
               v-model="form.description"
               label="คำอธิบาย"
@@ -155,7 +162,6 @@
               dense
               rows="3"
             />
-
             <v-file-input
               v-if="!editMode"
               v-model="form.image"
@@ -167,13 +173,12 @@
             />
           </v-form>
         </v-card-text>
-
         <v-card-actions>
           <v-spacer />
           <v-btn text @click="closeDialog">ยกเลิก</v-btn>
-          <v-btn color="primary" dark :loading="saving" @click="saveProduct">
-            บันทึก
-          </v-btn>
+          <v-btn color="primary" dark :loading="saving" @click="saveProduct"
+            >บันทึก</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -191,9 +196,13 @@
         <v-card-actions>
           <v-spacer />
           <v-btn text @click="deleteDialog = false">ยกเลิก</v-btn>
-          <v-btn color="red" dark :loading="deleting" @click="confirmDelete">
-            ลบเลย
-          </v-btn>
+          <v-btn
+            color="red"
+            dark
+            :loading="deleting"
+            @click="handleConfirmDelete"
+            >ลบเลย</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -213,248 +222,190 @@
   </v-container>
 </template>
 
-<script>
-export default {
-  name: "ProductView",
+<script setup>
+import { ref, reactive, onMounted, nextTick } from "vue";
+import { useProduct } from "@/composables/useProduct";
+import { useCart } from "@/composables/useCart";
 
-  data() {
-    return {
-      loading: false,
-      saving: false,
-      deleting: false,
+const { addToCart } = useCart();
 
-      productsData: [],
-      quantities: {},
+const {
+  productsData,
+  loading,
+  saving,
+  deleting,
+  fetchProducts,
+  createProduct,
+  updateProduct,
+  removeProduct,
+} = useProduct();
 
-      dialog: false,
-      editMode: false,
-      deleteDialog: false,
-      selectedProduct: null,
+//เช็ค role ผู้ใช้งาน
+const userRole = ref(JSON.parse(localStorage.getItem("user"))?.role || "user");
 
-      form: {
-        productName: "",
-        category: "อาหารจานหลัก",
-        price: "",
-        stock: "",
-        description: "",
-        image: null,
-      },
+const formRef = ref(null);
+const dialog = ref(false);
+const editMode = ref(false);
+const deleteDialog = ref(false);
+const selectedProduct = ref(null);
 
-      snackbar: {
-        show: false,
-        message: "",
-        color: "success",
-      },
-    };
-  },
+const quantities = reactive({});
+const snackbar = reactive({ show: false, message: "", color: "success" });
 
-  created() {
-    this.fetchData();
-  },
+const form = reactive({
+  productName: "",
+  price: "",
+  stock: "",
+  description: "",
+  image: null,
+});
 
-  methods: {
-    async fetchData() {
-      this.loading = true;
-      try {
-        const response = await this.axios.get("/products");
-        let data = response.data;
-        if (response.data && response.data.data) {
-          data = response.data.data;
-        }
-        this.productsData = data;
-      } catch (error) {
-        console.error("Fetch Error:", error);
-        if (error.response?.status === 401) {
-          this.productsData = [];
-          this.showToast("กรุณาเข้าสู่ระบบก่อน", "error");
-        }
-      } finally {
-        this.loading = false;
-      }
-    },
-    openAdd() {
-      this.editMode = false;
-      this.resetForm();
-      this.dialog = true;
-    },
-    openEdit(product) {
-      this.editMode = true;
-      this.selectedProduct = product;
-      this.form = {
-        productName: product.productName || "",
-        category: product.category || "อาหารจานหลัก",
-        price: product.price || "",
-        stock: product.stock || "",
-        description: product.description || "",
-        image: null,
+// Lifecycle
+onMounted(async () => {
+  try {
+    await fetchProducts();
+  } catch (error) {
+    if (error.response?.status === 401) {
+      showToast("กรุณาเข้าสู่ระบบก่อน", "error");
+    }
+  }
+});
+
+const openAdd = () => {
+  editMode.value = false;
+  resetForm();
+  dialog.value = true;
+};
+
+const openEdit = (product) => {
+  editMode.value = true;
+  selectedProduct.value = product;
+  Object.assign(form, {
+    productName: product.productName || "",
+    price: product.price || "",
+    stock: product.stock || "",
+    description: product.description || "",
+    image: null,
+  });
+  dialog.value = true;
+};
+
+// บันทึกสินค้า (ทั้งเพิ่มและแก้ไข)
+const saveProduct = async () => {
+  if (!formRef.value.validate()) return;
+
+  try {
+    if (editMode.value) {
+      const id = selectedProduct.value._id || selectedProduct.value.id;
+      const body = {
+        productName: form.productName,
+        price: form.price,
+        stock: form.stock,
+        description: form.description,
       };
-      this.dialog = true;
-    },
-
-    async saveProduct() {
-      if (!this.$refs.form.validate()) return;
-
-      this.saving = true;
-      try {
-        if (this.editMode) {
-          const body = {
-            productName: this.form.productName,
-            category: this.form.category,
-            price: this.form.price,
-            stock: this.form.stock,
-            description: this.form.description,
-          };
-
-          const response = await this.axios.put(
-            `/products/${this.selectedProduct._id || this.selectedProduct.id}`,
-            body,
-          );
-
-          // อัปเดต local array โดยไม่ต้อง fetch ใหม่
-          const updatedProduct = response.data.data || response.data;
-          const index = this.productsData.findIndex(
-            (p) =>
-              p._id === (this.selectedProduct._id || this.selectedProduct.id),
-          );
-          if (index !== -1) {
-            this.$set(this.productsData, index, updatedProduct);
-          } else {
-            await this.fetchData();
-          }
-
-          this.showToast("แก้ไขเมนูสำเร็จ ✓");
-        } else {
-          // POST
-          const formData = new FormData();
-          formData.append("productName", this.form.productName);
-          formData.append("category", this.form.category);
-          formData.append("price", this.form.price);
-          formData.append("stock", this.form.stock);
-          formData.append("description", this.form.description);
-          if (this.form.image) {
-            formData.append("image", this.form.image);
-          }
-
-          const response = await this.axios.post("/products", formData, {
-            headers: { "Content-Type": "multipart/form-data" },
-          });
-
-          const newProduct = response.data.data || response.data;
-          this.productsData.push(newProduct);
-          this.showToast("เพิ่มเมนูใหม่สำเร็จ");
-        }
-
-        this.closeDialog();
-      } catch (error) {
-        console.error("Save Error:", error);
-        this.showToast("เกิดข้อผิดพลาด กรุณาลองใหม่", "error");
-      } finally {
-        this.saving = false;
-      }
-    },
-
-    openDelete(product) {
-      this.selectedProduct = product;
-      this.deleteDialog = true;
-    },
-
-    async confirmDelete() {
-      this.deleting = true;
-      try {
-        await this.axios.delete(
-          `/products/${this.selectedProduct._id || this.selectedProduct.id}`,
-        );
-
-        const index = this.productsData.findIndex(
-          (p) =>
-            p._id === (this.selectedProduct._id || this.selectedProduct.id),
-        );
-        if (index !== -1) {
-          this.$delete(this.productsData, index);
-        } else {
-          await this.fetchData();
-        }
-
-        this.showToast("ลบเมนูสำเร็จ");
-        this.deleteDialog = false;
-      } catch (error) {
-        console.error("Delete Error:", error);
-        this.showToast("ลบไม่สำเร็จ กรุณาตรวจสอบสิทธิ์", "error");
-      } finally {
-        this.deleting = false;
-      }
-    },
-
-    resetForm() {
-      this.form = {
-        productName: "",
-        category: "อาหารจานหลัก",
-        price: "",
-        stock: "",
-        description: "",
-        image: null,
-      };
-      this.$nextTick(() => {
-        if (this.$refs.form) this.$refs.form.resetValidation();
+      await updateProduct(id, body);
+      showToast("แก้ไขเมนูสำเร็จ ✓");
+    } else {
+      const formData = new FormData();
+      Object.keys(form).forEach((key) => {
+        if (form[key] !== null) formData.append(key, form[key]);
       });
-    },
+      await createProduct(formData);
+      showToast("เพิ่มเมนูใหม่สำเร็จ");
+    }
+    closeDialog();
+  } catch (error) {
+    console.error("Save Error:", error);
+    showToast("เกิดข้อผิดพลาด กรุณาลองใหม่", "error");
+  }
+};
 
-    closeDialog() {
-      this.dialog = false;
-      this.selectedProduct = null;
-      this.resetForm();
-    },
+// 🟢 ปลดคอมเมนต์ฟังก์ชันเปิดหน้าต่างยืนยันลบ
+const openDelete = (product) => {
+  selectedProduct.value = product;
+  deleteDialog.value = true;
+};
 
-    showToast(message, color = "success") {
-      this.snackbar = { show: true, message, color };
-    },
+// ยืนยันการลบ
+const handleConfirmDelete = async () => {
+  try {
+    const id = selectedProduct.value._id || selectedProduct.value.id;
+    await removeProduct(id);
+    showToast("ลบเมนูสำเร็จ");
+    deleteDialog.value = false;
+  } catch (error) {
+    console.error("Delete Error:", error);
+    showToast("ลบไม่สำเร็จ กรุณาตรวจสอบสิทธิ์", "error");
+  }
+};
 
-    getImageUrl(imagePath) {
-      if (!imagePath)
-        return "https://cdn.vuetifyjs.com/images/cards/cooking.png";
-      if (imagePath.startsWith("http")) return imagePath;
+// จัดการจำนวนและสั่งซื้อ (เฉพาะ User)
+const getQty = (product) => {
+  const id = product._id || product.id;
+  return quantities[id] || 1;
+};
 
-      let path = imagePath.replace(/\\/g, "/");
-      if (path.startsWith("public/")) path = path.substring(7);
-      else if (path.startsWith("/public/")) path = path.substring(8);
-      if (!path.startsWith("/")) path = "/" + path;
+// เพิ่มจำนวน สินค้า
+// const changeQty = (product, delta) => {
+//   const id = product._id || product.id;
+//   const current = getQty(product);
+//   const max = product.stock;
+//   const newValue = Math.min(Math.max(1, current + delta), max);
+//   quantities.value = { ...quantities.value, [id]: newValue };
+// };
 
-      return `http://localhost:3000${path}`;
-    },
+const handleAddToCart = (product) => {
+  const productId = product._id || product.id;
+  const quantity = getQty(product);
 
-    getQty(product) {
-      const id = product._id || product.id;
-      return this.quantities[id] || 1;
-    },
+  if (quantity > product.stock) {
+    showToast(`สินค้ามีสต็อกแค่ ${product.stock} ชิ้น`, "warning");
+    return;
+  }
 
-    changeQty(product, delta) {
-      const id = product._id || product.id;
-      const current = this.getQty(product);
-      const max = product.stock || 99;
-      const next = Math.min(Math.max(1, current + delta), max);
-      this.$set(this.quantities, id, next);
-    },
+  addToCart(product, quantity);
+  showToast(
+    `เพิ่ม "${product.productName}" จำนวน ${quantity} ชิ้น ลงตะกร้าแล้ว 🛒`,
+  );
 
-    async createOrder(product) {
-      const productId = product._id || product.id;
-      const quantity = this.getQty(product);
+  quantities.value = { ...quantities.value, [productId]: 1 };
+};
 
-      try {
-        const response = await this.axios.post(
-          `/products/${productId}/orders`,
-          { quantity },
-        );
-        this.showToast(`สั่ง "${product.productName}" x${quantity} สำเร็จ 🛒`);
+const resetForm = () => {
+  Object.assign(form, {
+    productName: "",
+    price: "",
+    stock: "",
+    description: "",
+    image: null,
+  });
+  nextTick(() => {
+    if (formRef.value) formRef.value.resetValidation();
+  });
+};
 
-        this.$set(this.quantities, productId, 1);
+const closeDialog = () => {
+  dialog.value = false;
+  selectedProduct.value = null;
+  resetForm();
+};
 
-        console.log("Order created:", response.data);
-      } catch (error) {
-        console.error("Create Order Error:", error);
-        this.showToast("สั่งซื้อไม่สำเร็จ กรุณาลองใหม่", "error");
-      }
-    },
-  },
+const showToast = (message, color = "success") => {
+  snackbar.message = message;
+  snackbar.color = color;
+  snackbar.show = true;
+};
+
+const getImageUrl = (imagePath) => {
+  if (!imagePath) return "https://cdn.vuetifyjs.com/images/cards/cooking.png";
+  if (imagePath.startsWith("http")) return imagePath;
+
+  let path = imagePath.replace(/\\/g, "/");
+  if (path.startsWith("public/")) path = path.substring(7);
+  else if (path.startsWith("/public/")) path = path.substring(8);
+  if (!path.startsWith("/")) path = "/" + path;
+
+  return `http://localhost:3000${path}`;
 };
 </script>
 

@@ -1,29 +1,24 @@
 <template>
   <v-container>
-    <div class="user-approve-contant">
-      <h2 class="mb-4">User Management (Approve)</h2>
+    <div class="d-flex align-center justify-space-between mb-4">
+      <h2 class="text-h5">จัดการผู้ใช้งาน</h2>
+    </div>
 
-      <v-btn-toggle v-model="statusFilter" mandatory class="mb-4">
-        <v-btn value="all">All</v-btn>
-        <v-btn value="pending">Pending</v-btn>
-        <v-btn value="approved">Approved</v-btn>
-      </v-btn-toggle>
-
+    <v-card outlined>
       <v-data-table
         :headers="headers"
-        :items="filteredUsers"
-        :items-per-page="10"
-        class="elevation-1"
+        :items="users"
         :loading="loading"
-        loading-text="Loading... Please wait"
+        loading-text="กำลังโหลดข้อมูล..."
+        no-data-text="ไม่มีข้อมูลผู้ใช้งาน"
       >
         <template v-slot:[`item.status`]="{ item }">
           <v-chip
-            :color="item.status === 'approved' ? 'green' : 'orange'"
-            dark
             small
+            :color="item.status === 'approved' ? 'success' : 'warning'"
+            dark
           >
-            {{ item.status }}
+            {{ item.status === "approved" ? "อนุมัติแล้ว" : "รออนุมัติ" }}
           </v-chip>
         </template>
 
@@ -34,37 +29,39 @@
             small
             @click="approveUser(item._id || item.id)"
           >
-            Approve
+            <v-icon left small>mdi-check</v-icon> อนุมัติ
           </v-btn>
+          <span v-else class="grey--text text-caption">-</span>
         </template>
       </v-data-table>
-    </div>
+    </v-card>
+
+    <v-snackbar v-model="snackbar.show" :color="snackbar.color" top right>
+      {{ snackbar.message }}
+      <template v-slot:action="{ attrs }">
+        <v-btn text v-bind="attrs" @click="snackbar.show = false">ปิด</v-btn>
+      </template>
+    </v-snackbar>
   </v-container>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
-  name: "UserView",
+  name: "UserManageView",
   data() {
     return {
       loading: false,
-      statusFilter: "all", // "all", "pending", "approved","rejected"
-      headers: [
-        { text: "Username", align: "start", value: "username" },
-        { text: "Role", value: "role" },
-        { text: "Status", value: "status" },
-        { text: "Actions", value: "actions", sortable: false },
-      ],
       users: [],
+      headers: [
+        { text: "Username", value: "username" },
+        { text: "Role", value: "role" },
+        { text: "สถานะ", value: "status" },
+        { text: "จัดการ", value: "actions", sortable: false, align: "center" },
+      ],
+      snackbar: { show: false, message: "", color: "success" },
     };
-  },
-  computed: {
-    filteredUsers() {
-      if (this.statusFilter === "all") {
-        return this.users;
-      }
-      return this.users.filter((user) => user.status === this.statusFilter);
-    },
   },
   created() {
     this.fetchUsers();
@@ -73,43 +70,32 @@ export default {
     async fetchUsers() {
       this.loading = true;
       try {
-        const response = await this.axios.get("/users");
-
-        let usersData = response.data;
-        if (response.data && response.data.data) {
-          usersData = response.data.data;
-        }
-
-        this.users = usersData;
+        const response = await axios.get("/api/v1/users");
+        this.users = response.data.data || response.data;
       } catch (error) {
         console.error("Fetch Users Error:", error);
+        this.showToast("ดึงข้อมูลผู้ใช้ไม่สำเร็จ", "error");
       } finally {
         this.loading = false;
       }
     },
-    async approveUser(id) {
-      try {
-        await this.axios.put(`/users/${id}/approve`);
+    async approveUser(userId) {
+      if (!confirm("ยืนยันการอนุมัติผู้ใช้งานนี้?")) return;
 
-        const user = this.users.find((u) => u._id === id || u.id === id);
-        if (user) {
-          this.$set(user, "status", "approved");
-        } else {
-          this.fetchUsers();
-        }
+      try {
+        await axios.put(`/api/v1/users/${userId}/approve`);
+        this.showToast("อนุมัติผู้ใช้งานสำเร็จ!");
+        this.fetchUsers();
       } catch (error) {
         console.error("Approve User Error:", error);
-        alert(
-          "Failed to approve user. Please check if you have Admin permissions.",
-        );
+        this.showToast("เกิดข้อผิดพลาดในการอนุมัติ", "error");
       }
+    },
+    showToast(message, color = "success") {
+      this.snackbar.message = message;
+      this.snackbar.color = color;
+      this.snackbar.show = true;
     },
   },
 };
 </script>
-
-<style scoped>
-.user-approve-contant {
-  padding: 20px;
-}
-</style>

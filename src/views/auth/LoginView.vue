@@ -45,7 +45,7 @@
             >
           </v-card-actions>
           <v-card-text>
-            Sing up <router-link to="/resigter">here</router-link>
+            Sign up <router-link to="/register">here</router-link>
           </v-card-text>
         </v-card>
       </v-col>
@@ -76,29 +76,31 @@ export default {
       this.successMessage = "";
 
       try {
-        const response = await this.axios.post("/login", {
+        const response = await this.axios.post("/api/v1/login", {
           username: this.username,
           password: this.password,
         });
 
-        console.log("Login Response:", response.data);
-
-        // Store the token in both cookies and localStorage
         if (response.data.token) {
-          this.$cookies.set("user_token", response.data.token, "1h");
-          localStorage.setItem("user_token", response.data.token);
+          localStorage.setItem("token", response.data.token);
+
+          const userData = response.data.user || {
+            username: this.username,
+            role: "user",
+          };
+          localStorage.setItem("user", JSON.stringify(userData));
         }
 
         this.successMessage = "Login successful!";
-        this.$router.push("/product");
+
+        const role = response.data.user?.role || "user";
+        this.$router
+          .push({ name: role === "admin" ? "order-summary" : "shop" })
+          .catch(() => {});
       } catch (error) {
         console.error("Login API Error:", error);
 
-        if (
-          error.response &&
-          error.response.data &&
-          error.response.data.message
-        ) {
+        if (error.response?.data?.message) {
           this.errorMessage = error.response.data.message;
         } else {
           this.errorMessage =
