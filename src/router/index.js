@@ -97,6 +97,17 @@ const routes = [
         component: () => import("../views/auth/ResigterView.vue"),
         meta: { guestOnly: true },
       },
+      {
+        path: "workshop",
+        name: "workshop",
+        component: () => import("../views/AboutView.vue"),
+      },
+      {
+        path: "my-orders",
+        name: "my-orders",
+        component: () => import("../views/MyOrderView.vue"),
+        meta: { requiresAuth: true, role: "user" },
+      },
     ],
   },
   {

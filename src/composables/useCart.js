@@ -6,12 +6,13 @@ const getUserId = () => {
   return user.id || "guest";
 };
 
-const STORAGE_KEY = computed(() => `cart_items_${getUserId()}`);
+// ✅ แก้ bug 1: เปลี่ยนจาก computed → function
+const getStorageKey = () => `cart_items_${getUserId()}`;
 
 const loadCart = () => {
   try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-  } catch (error) {
+    return JSON.parse(localStorage.getItem(getStorageKey()) || "[]");
+  } catch {
     return [];
   }
 };
@@ -20,7 +21,7 @@ const cartItems = ref(loadCart());
 const isLoading = ref(false);
 
 const persistCart = () => {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(cartItems.value));
+  localStorage.setItem(getStorageKey(), JSON.stringify(cartItems.value));
 };
 
 const normalizeProductId = (product) => {
@@ -47,7 +48,7 @@ const addToCart = (product, quantity = 1) => {
 
   if (index !== -1) {
     const newQty = cartItems.value[index].quantity + nextQuantity;
-    cartItems.value[index].quantity = Math.min(newQty, maxStock); // ไม่เกิน stock
+    cartItems.value[index].quantity = Math.min(newQty, maxStock);
   } else {
     cartItems.value.push({
       productId,
@@ -55,7 +56,7 @@ const addToCart = (product, quantity = 1) => {
       price: Number(product.price) || 0,
       image: product.image || product.imageUrl || "",
       quantity: Math.min(nextQuantity, maxStock),
-      stock: maxStock, // เก็บ stock ไว้ด้วย
+      stock: maxStock,
     });
   }
   persistCart();
@@ -71,7 +72,6 @@ const updateQuantity = (productId, delta) => {
   } else {
     cartItems.value[index].quantity = nextQuantity;
   }
-
   persistCart();
 };
 
@@ -117,17 +117,24 @@ const checkout = async () => {
       })),
     };
     const response = await axios.post("/api/v1/orders", payload, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: { Authorization: `Bearer ${token}` },
     });
     clearCart();
     return response.data;
   } catch (error) {
     console.log(error);
+    throw error;
   } finally {
     isLoading.value = false;
   }
+};
+
+const fetchMyOrders = async () => {
+  const token = localStorage.getItem("token");
+  const response = await axios.get("/api/v1/orders", {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return response.data.data;
 };
 
 export function useCart() {
@@ -141,5 +148,6 @@ export function useCart() {
     removeFromCart,
     clearCart,
     checkout,
+    fetchMyOrders,
   };
 }

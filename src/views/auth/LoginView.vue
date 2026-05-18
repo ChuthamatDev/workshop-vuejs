@@ -45,7 +45,7 @@
             >
           </v-card-actions>
           <v-card-text>
-            Sign up <router-link to="/register">here</router-link>
+            Sing up <router-link to="/resigter">here</router-link>
           </v-card-text>
         </v-card>
       </v-col>
@@ -76,12 +76,15 @@ export default {
       this.successMessage = "";
 
       try {
-        const response = await this.axios.post("/api/v1/login", {
+        const response = await this.axios.post("/login", {
           username: this.username,
           password: this.password,
         });
 
+        console.log("Login Response:", response.data);
+
         if (response.data.token) {
+          this.$cookies.set("token", response.data.token, "1h");
           localStorage.setItem("token", response.data.token);
 
           const userData = response.data.user || {
@@ -93,14 +96,22 @@ export default {
 
         this.successMessage = "Login successful!";
 
-        const role = response.data.user?.role || "user";
-        this.$router
-          .push({ name: role === "admin" ? "order-summary" : "shop" })
-          .catch(() => {});
+        this.$router.push("/product").catch((err) => {
+          if (
+            err.name !== "NavigationDuplicated" &&
+            !err.message.includes("Redirected")
+          ) {
+            console.error(err);
+          }
+        });
       } catch (error) {
         console.error("Login API Error:", error);
 
-        if (error.response?.data?.message) {
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.message
+        ) {
           this.errorMessage = error.response.data.message;
         } else {
           this.errorMessage =
