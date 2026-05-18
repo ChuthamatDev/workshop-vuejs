@@ -6,7 +6,6 @@ const getUserId = () => {
   return user.id || "guest";
 };
 
-// ✅ แก้ bug 1: เปลี่ยนจาก computed → function
 const getStorageKey = () => `cart_items_${getUserId()}`;
 
 const loadCart = () => {
