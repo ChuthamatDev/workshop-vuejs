@@ -2,12 +2,13 @@
   <v-sheet class="mx-auto" max-width="300">
     <h3>Workshop 2</h3>
     <br />
-    <v-form ref="form" @submit.prevent="submit">
+    <v-form ref="form" @submit.prevent="submit" lazy-validation>
       <v-text-field
         v-model="input"
         :rules="rules"
         label="Enter your grade number"
         type="number"
+        outlined
       ></v-text-field>
 
       <v-btn :loading="loading" class="mt-2" type="submit" color="primary" block

@@ -25,11 +25,11 @@ body,
   padding: 0 80px;
   margin: 0;
   box-sizing: border-box;
-  background-color: #5bbdd5;
+  background-color: #e3f2fd;
   min-height: 100vh;
 }
 .toolbar {
-  background-color: #5bbdd5 !important;
+  background-color: #0288d1 !important;
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
 }
 .montserrat-toolbar {
@@ -67,4 +67,35 @@ body,
   display: flex;
   align-items: center;
 }
+
+/* Global Form Rounded Styles & Blue Theme Customization */
+.v-card {
+  border-radius: 16px !important;
+  overflow: hidden !important;
+}
+
+.v-text-field--outlined fieldset {
+  border-radius: 12px !important;
+  border-color: rgba(2, 136, 209, 0.4) !important;
+  transition: border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.v-text-field--outlined:hover fieldset {
+  border-color: rgba(2, 136, 209, 0.7) !important;
+}
+
+.v-text-field--outlined.v-input--is-focused fieldset {
+  border-color: #0288d1 !important;
+}
+
+.v-btn {
+  border-radius: 12px !important;
+}
+
+.v-input input,
+.v-input textarea,
+.v-input select {
+  border-radius: 12px !important;
+}
+
 </style>
