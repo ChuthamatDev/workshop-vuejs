@@ -47,7 +47,7 @@ export default {
       }
 
       try {
-        const response = await this.axios.post("/products", formData, {
+        const response = await this.axios.post("/api/v1/products", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },

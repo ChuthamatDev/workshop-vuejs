@@ -87,7 +87,7 @@ export default {
         this.successMessage = "";
 
         try {
-          const response = await this.axios.post("/login", {
+          const response = await this.axios.post("/api/v1/login", {
             username: this.username,
             password: this.password,
           });
