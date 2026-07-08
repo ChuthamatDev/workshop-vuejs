@@ -224,8 +224,8 @@
 
 <script setup>
 import { ref, reactive, onMounted, nextTick } from "vue";
-import { useProduct } from "@/composables/useProduct";
-import { useCart } from "@/composables/useCart";
+import { useProduct } from "@/hooks/useProduct";
+import { useCart } from "@/hooks/useCart";
 
 const { addToCart } = useCart();
 

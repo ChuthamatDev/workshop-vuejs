@@ -177,7 +177,7 @@
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router/composables";
-import { useCart } from "@/composables/useCart";
+import { useCart } from "@/hooks/useCart";
 
 const router = useRouter();
 const {

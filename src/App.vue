@@ -9,14 +9,13 @@ export default {
 </script>
 
 <style>
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Pixelify+Sans:wght@400..700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@100;200;300;400;500;600;700&family=Pixelify+Sans:wght@400..700&display=swap");
 
 html,
 body,
 #app,
 .container-app {
-  font-family: "Montserrat", sans-serif;
-  font-optical-sizing: auto;
+  font-family: "IBM Plex Sans Thai", sans-serif;
   font-weight: 400;
   font-style: normal;
 }
@@ -33,8 +32,7 @@ body,
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
 }
 .montserrat-toolbar {
-  font-family: "Montserrat", sans-serif;
-  font-optical-sizing: auto;
+  font-family: "IBM Plex Sans Thai", sans-serif;
   font-weight: 400;
   font-style: normal;
 }

@@ -117,7 +117,7 @@
 </template>
 
 <script>
-import { useCart } from "@/composables/useCart";
+import { useCart } from "@/hooks/useCart";
 
 export default {
   name: "MyOrderView",
