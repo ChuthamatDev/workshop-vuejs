@@ -14,7 +14,9 @@
                 prepend-inner-icon="mdi-account"
                 type="text"
                 v-model="username"
-                :rules="formValidated ? [(v) => !!v || 'Username is required'] : []"
+                :rules="
+                  formValidated ? [(v) => !!v || 'Username is required'] : []
+                "
                 required
                 outlined
               ></v-text-field>
@@ -26,7 +28,9 @@
                 prepend-inner-icon="mdi-lock"
                 type="password"
                 v-model="password"
-                :rules="formValidated ? [(v) => !!v || 'Password is required'] : []"
+                :rules="
+                  formValidated ? [(v) => !!v || 'Password is required'] : []
+                "
                 required
                 outlined
               ></v-text-field>
@@ -87,20 +91,25 @@ export default {
         this.successMessage = "";
 
         try {
-          await this.axios.post("/api/v1/register", {
+          const response = await this.axios.post("/api/v1/register", {
             username: this.username,
             password: this.password,
           });
 
-          this.successMessage = "Register successful!";
-          this.$router.push({ name: "login" }).catch(() => {});
+          if (response.status === 201) {
+            this.successMessage = "Register successful!";
+            setTimeout(() => {
+              this.$router.push({ name: "login" }).catch(() => {});
+            }, 3000);
+          }
         } catch (error) {
           console.error("Register API Error:", error);
 
           if (error.response?.data?.message) {
             this.errorMessage = error.response.data.message;
           } else {
-            this.errorMessage = "Register failed. Please check your connection.";
+            this.errorMessage =
+              "Register failed. Please check your connection.";
           }
         } finally {
           this.loading = false;
