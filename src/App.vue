@@ -9,15 +9,48 @@ export default {
 </script>
 
 <style>
-@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@100;200;300;400;500;600;700&family=Pixelify+Sans:wght@400..700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Prompt:wght@100;200;300;400;500;600;700&display=swap");
 
 html,
 body,
 #app,
-.container-app {
-  font-family: "IBM Plex Sans Thai", sans-serif;
-  font-weight: 400;
-  font-style: normal;
+.container-app,
+.v-application,
+.v-application .title,
+.v-application .text-h1,
+.v-application .text-h2,
+.v-application .text-h3,
+.v-application .text-h4,
+.v-application .text-h5,
+.v-application .text-h6,
+.v-application .text-subtitle-1,
+.v-application .text-subtitle-2,
+.v-application .text-body-1,
+.v-application .text-body-2,
+.v-application .text-button,
+.v-application .text-caption,
+.v-application .text-overline,
+.v-application input,
+.v-application button,
+.v-application select,
+.v-application textarea,
+.v-application .v-btn,
+.v-application .v-input,
+.v-application .v-card,
+.v-application .v-list-item,
+.v-application .v-dialog,
+.v-application .v-alert {
+  font-family: "Prompt", sans-serif !important;
+}
+
+/* Preserve monospace for IDs and code blocks */
+.order-id,
+.order-id-chip,
+.v-application code,
+.v-application kbd,
+.v-application pre,
+.v-application samp {
+  font-family: monospace !important;
 }
 
 .container-app {
@@ -32,7 +65,7 @@ body,
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
 }
 .montserrat-toolbar {
-  font-family: "IBM Plex Sans Thai", sans-serif;
+  font-family: "Prompt", sans-serif;
   font-weight: 400;
   font-style: normal;
 }
@@ -49,7 +82,7 @@ body,
   font-weight: 700;
 }
 .pixelify-title {
-  font-family: "Pixelify Sans", sans-serif;
+  font-family: "Prompt", sans-serif;
   font-optical-sizing: auto;
   font-weight: 600;
   font-style: normal;

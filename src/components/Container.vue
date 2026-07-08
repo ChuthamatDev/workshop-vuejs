@@ -45,12 +45,7 @@
 
       <v-divider vertical class="mx-3 my-2" />
 
-      <v-btn
-        v-if="isLoggedIn"
-        text
-        class="logout-btn"
-        @click="handleLogout"
-      >
+      <v-btn v-if="isLoggedIn" text class="logout-btn" @click="handleLogout">
         <v-icon left>mdi-logout</v-icon> ออกจากระบบ
       </v-btn>
     </v-app-bar>
@@ -164,6 +159,5 @@ export default {
 
 .app-main {
   background-color: #f8fafc !important;
-  min-height: 100vh;
 }
 </style>

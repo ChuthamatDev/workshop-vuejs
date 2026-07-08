@@ -66,7 +66,12 @@ export default {
   name: "Cards",
   data() {
     return {
-      skills: ["React.js", "JavaScript", "UI Design"],
+      skills: [
+        "Frontend Developer",
+        "UI Design",
+        "Responsive Design",
+        "Version Control",
+      ],
     };
   },
 };

@@ -1,8 +1,15 @@
 <template>
-  <v-container>
-    <div class="d-flex align-center justify-space-between mb-4">
-      <h2 class="text-h5">เมนูอาหาร</h2>
-      <v-btn v-if="userRole === 'admin'" color="primary" dark @click="openAdd">
+  <v-container class="product-container py-6 px-12 p-4">
+    <div class="d-flex align-center justify-space-between mb-6">
+      <h2 class="text-h5 font-weight-bold slate-title">เมนูอาหาร</h2>
+      <v-btn
+        v-if="userRole === 'admin'"
+        color="indigo"
+        dark
+        depressed
+        class="action-btn"
+        @click="openAdd"
+      >
         <v-icon left>mdi-plus</v-icon>เพิ่มเมนู
       </v-btn>
     </div>
@@ -59,34 +66,13 @@
 
           <v-card-actions class="pa-3">
             <template v-if="userRole === 'user'">
-              <!-- <v-btn
-                icon
-                small
-                :disabled="getQty(product) <= 1"
-                @click="changeQty(product, -1)"
-              >
-                <v-icon small>mdi-minus</v-icon>
-              </v-btn>
-
-              <span class="mx-2 text-body-2 font-weight-medium">
-                {{ getQty(product) }}
-              </span>
-
-              <v-btn
-                icon
-                small
-                :disabled="getQty(product) >= (product.stock || 99)"
-                @click="changeQty(product, 1)"
-              >
-                <v-icon small>mdi-plus</v-icon>
-              </v-btn> -->
-
               <v-spacer />
-
               <v-btn
-                color="primary"
+                color="indigo"
                 dark
+                depressed
                 small
+                class="action-btn"
                 @click="handleAddToCart(product)"
               >
                 <v-icon left small>mdi-cart-plus</v-icon>
@@ -96,10 +82,22 @@
 
             <template v-if="userRole === 'admin'">
               <v-spacer></v-spacer>
-              <v-btn color="blue" text small @click="openEdit(product)">
+              <v-btn
+                color="indigo"
+                text
+                small
+                class="action-btn"
+                @click="openEdit(product)"
+              >
                 <v-icon left small>mdi-pencil</v-icon> แก้ไข
               </v-btn>
-              <v-btn color="red" text small @click="openDelete(product)">
+              <v-btn
+                color="red"
+                text
+                small
+                class="action-btn"
+                @click="openDelete(product)"
+              >
                 <v-icon left small>mdi-trash-can-outline</v-icon> ลบ
               </v-btn>
             </template>
@@ -410,10 +408,24 @@ const getImageUrl = (imagePath) => {
 </script>
 
 <style scoped>
+.product-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
 .v-card {
   transition: box-shadow 0.2s;
 }
 .v-card:hover {
   box-shadow: 0 4px 20px rgba(83, 74, 183, 0.15) !important;
+}
+.slate-title {
+  color: #1e293b;
+  font-weight: 700;
+}
+.action-btn {
+  text-transform: none !important;
+  font-weight: 600 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(63, 81, 181, 0.15) !important;
 }
 </style>

@@ -1,12 +1,18 @@
 <template>
-  <v-container class="fill-height" fluid>
+  <v-container class="fill-height auth-page" fluid>
     <v-row align="center" justify="center">
-      <v-col cols="12" sm="6" md="4">
-        <v-card class="elevation-12">
-          <v-toolbar color="primary" dark flat>
-            <v-toolbar-title>Login Admin System</v-toolbar-title>
-          </v-toolbar>
-          <v-card-text>
+      <v-col cols="12" sm="8" md="5" lg="4">
+        <v-card class="auth-card pa-8 pa-md-10" elevation="2">
+          <!-- Auth Header -->
+          <div class="text-center mb-8">
+            <div class="auth-logo mb-4">
+              <v-icon color="indigo" large>mdi-shield-account-outline</v-icon>
+            </div>
+            <h2 class="auth-title font-weight-black mb-1">Admin Portal</h2>
+            <p class="auth-subtitle">Welcome back! Access administrative controls.</p>
+          </div>
+
+          <v-card-text class="pa-0">
             <v-form @submit.prevent="handleLoginAdmin" ref="form" lazy-validation>
               <v-text-field
                 label="Username"
@@ -38,20 +44,21 @@
               <v-alert v-if="successMessage" type="success" dense class="mt-3">
                 {{ successMessage }}
               </v-alert>
+
+              <v-btn
+                depressed
+                block
+                large
+                rounded
+                color="indigo"
+                class="auth-btn white--text font-weight-bold mt-4"
+                @click="handleLoginAdmin"
+                :loading="loading"
+              >
+                Sign In as Admin
+              </v-btn>
             </v-form>
           </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn
-              rounded
-              depressed
-              class="v-btn--soft px-6 font-weight-bold"
-              @click="handleLoginAdmin"
-              :loading="loading"
-            >
-              Login
-            </v-btn>
-          </v-card-actions>
         </v-card>
       </v-col>
     </v-row>
@@ -116,25 +123,52 @@ export default {
 </script>
 
 <style scoped>
-.v-btn--soft {
-  background-color: rgba(91, 189, 213, 0.15) !important;
-  color: #3da8c2 !important;
-  font-weight: 600 !important;
-  letter-spacing: 0.5px;
-  text-transform: none;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+.auth-page {
+  background-color: #f8fafc !important;
 }
 
-.v-btn--soft:hover {
-  background-color: rgba(91, 189, 213, 0.25) !important;
+.auth-card {
+  border-radius: 16px !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02) !important;
+}
+
+.auth-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  background-color: rgba(63, 81, 181, 0.08);
+  border-radius: 50%;
+}
+
+.auth-title {
+  font-size: 1.75rem;
+  color: #1e293b;
+  letter-spacing: -0.5px;
+}
+
+.auth-subtitle {
+  font-size: 0.95rem;
+  color: #64748b;
+}
+
+.auth-btn {
+  text-transform: none !important;
+  letter-spacing: 0.5px !important;
+  border-radius: 28px !important;
+  font-size: 1.05rem !important;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  box-shadow: 0 4px 12px rgba(63, 81, 181, 0.15) !important;
+}
+
+.auth-btn:hover {
   transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(63, 81, 181, 0.25) !important;
 }
 
-.v-btn--soft:active {
+.auth-btn:active {
   transform: translateY(0);
-}
-
-.v-btn--soft::before {
-  background-color: transparent !important;
 }
 </style>
