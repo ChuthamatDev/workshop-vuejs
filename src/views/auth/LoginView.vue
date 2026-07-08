@@ -107,7 +107,7 @@ export default {
 
           this.successMessage = "Login successful!";
 
-          this.$router.push("/product").catch((err) => {
+          this.$router.push("/shop").catch((err) => {
             if (
               err.name !== "NavigationDuplicated" &&
               !err.message.includes("Redirected")

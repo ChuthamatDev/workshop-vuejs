@@ -1,48 +1,83 @@
 <template>
-  <main>
-    <cards />
-    <div class="hobbies-section">
-      <div class="section-header">
-        <img
-          src="@/assets/icons8-pixel-heart-48.png"
-          alt="heart"
-          class="section-icon"
-        />
-        <h2 class="title font-weight-bold mb-2 mt-2">Hobbies</h2>
-      </div>
-      <ul class="hobby-list">
-        <li>Reading a book (Fiction, Non-Fiction, Self-Development)</li>
-        <li>Playing Guitar</li>
-        <li>Drinking Coffee and Matcha</li>
-      </ul>
-    </div>
-    <div>
-      <h4>Books recommanded</h4>
-      <hobbie />
-    </div>
-    <section class="mt-6 likes-section">
-      <div class="section-header">
-        <img
-          src="@/assets/icons8-pixel-cat-48.png"
-          alt="cat"
-          class="section-icon"
-        />
-        <h4>Things I Like</h4>
-      </div>
-      <ul>
-        <li>Flower - Lily</li>
-        <li>Nature green forest</li>
-        <li>Cat, Dog</li>
-      </ul>
-    </section>
-    <section class="dislikes-section">
-      <h4>Don't Like</h4>
-      <ul>
-        <li>Soy milk</li>
-        <li>Snake, gecko</li>
-      </ul>
-    </section>
-  </main>
+  <v-container class="py-6 px-4" fluid>
+    <v-row>
+      <!-- Left Column: Profile Card -->
+      <v-col cols="12" md="4" class="mb-6 mb-md-0">
+        <cards />
+      </v-col>
+
+      <!-- Right Column: Personal Sections -->
+      <v-col cols="12" md="8">
+        <!-- Hobbies Section Card -->
+        <v-card class="hobbies-card pa-6 mb-6" elevation="2">
+          <div class="section-header">
+            <img
+              src="@/assets/icons8-pixel-heart-48.png"
+              alt="heart"
+              class="section-icon"
+            />
+            <h2 class="section-title font-weight-bold">Hobbies</h2>
+          </div>
+          <ul class="hobby-list">
+            <li>Reading a book (Fiction, Non-Fiction, Self-Development)</li>
+            <li>Playing Guitar</li>
+            <li>Drinking Coffee and Matcha</li>
+          </ul>
+        </v-card>
+
+        <!-- Recommended Books Card -->
+        <v-card class="books-card pa-6 mb-6" elevation="2">
+          <div class="section-header">
+            <img
+              src="@/assets/icons8-pixel-star-40.png"
+              alt="star"
+              class="section-icon"
+            />
+            <h2 class="section-title font-weight-bold">Books Recommended</h2>
+          </div>
+          <hobbie />
+        </v-card>
+
+        <!-- Likes & Dislikes Grid -->
+        <v-row>
+          <!-- Likes Card -->
+          <v-col cols="12" sm="6">
+            <v-card class="likes-card pa-6 h-100" elevation="2">
+              <div class="section-header">
+                <img
+                  src="@/assets/icons8-pixel-cat-48.png"
+                  alt="cat"
+                  class="section-icon"
+                />
+                <h3 class="section-title font-weight-bold">Things I Like</h3>
+              </div>
+              <ul class="likes-list">
+                <li>Flower - Lily</li>
+                <li>Nature green forest</li>
+                <li>Cat, Dog</li>
+              </ul>
+            </v-card>
+          </v-col>
+
+          <!-- Dislikes Card -->
+          <v-col cols="12" sm="6">
+            <v-card class="dislikes-card pa-6 h-100" elevation="2">
+              <div class="section-header">
+                <v-icon color="deep-orange lighten-1" class="section-icon mr-2" large>
+                  mdi-close-circle-outline
+                </v-icon>
+                <h3 class="section-title font-weight-bold">Don't Like</h3>
+              </div>
+              <ul class="dislikes-list">
+                <li>Soy milk</li>
+                <li>Snake, gecko</li>
+              </ul>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -59,17 +94,11 @@ export default {
 </script>
 
 <style scoped>
-.header-icon {
-  width: 48px;
-  height: 48px;
-  animation: float 3s ease-in-out infinite;
-}
-
 .section-header {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 .section-icon {
@@ -78,50 +107,81 @@ export default {
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
 }
 
-.hobbies-section {
-  margin: 30px 0;
-  padding: 20px;
-  background-color: rgba(249, 178, 215, 0.15);
-  border-radius: 8px;
-  border-left: 4px solid #f9b2d7;
-}
-
-.likes-section {
-  margin: 30px 0;
-  padding: 20px;
-  background-color: rgba(207, 236, 243, 0.15);
-  border-radius: 8px;
-  border-left: 4px solid #cfecf3;
-}
-
-.dislikes-section {
-  margin: 30px 0;
-  padding: 20px;
-  background-color: rgba(246, 255, 220, 0.2);
-  border-radius: 8px;
-  border-left: 4px solid #f6ffdc;
-}
-
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-.title {
+.section-title {
   margin: 0;
+  font-size: 1.5rem;
+  letter-spacing: 0.5px;
 }
 
+/* Card Styles */
+.hobbies-card {
+  background-color: #fff9fb !important;
+  border-left: 6px solid #ffb2d9 !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.books-card {
+  background-color: #ffffff !important;
+  border-left: 6px solid #ffd54f !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.likes-card {
+  background-color: #f0faff !important;
+  border-left: 6px solid #81d4fa !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dislikes-card {
+  background-color: #fffbfa !important;
+  border-left: 6px solid #ffab91 !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover effect on cards */
+.hobbies-card:hover,
+.books-card:hover,
+.likes-card:hover,
+.dislikes-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Lists styling */
 ul {
-  list-style-position: inside;
-  line-height: 1.8;
+  list-style-type: none;
+  padding-left: 0 !important;
+  margin-top: 10px;
 }
 
 li {
-  margin: 8px 0;
+  display: flex;
+  align-items: center;
+  margin: 12px 0;
+  font-size: 1.05rem;
+  color: #37474f;
+}
+
+.hobby-list li::before {
+  content: "✦";
+  color: #ff80ab;
+  font-weight: bold;
+  margin-right: 12px;
+  font-size: 1.1rem;
+}
+
+.likes-list li::before {
+  content: "❤";
+  color: #29b6f6;
+  margin-right: 12px;
+  font-size: 1rem;
+}
+
+.dislikes-list li::before {
+  content: "✕";
+  color: #ff7043;
+  font-weight: bold;
+  margin-right: 12px;
+  font-size: 1rem;
 }
 </style>
