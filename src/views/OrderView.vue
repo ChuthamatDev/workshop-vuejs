@@ -92,7 +92,7 @@
               :text-color="statusTextColor(order.orderStatus)"
               class="font-weight-bold"
             >
-              {{ order.orderStatus.toUpperCase() }}
+              {{ order.orderStatus?.toUpperCase() }}
             </v-chip>
           </v-card-title>
 
@@ -102,7 +102,7 @@
               <v-col cols="12" sm="4">
                 <div class="text-subtitle-2 grey--text">ชื่อลูกค้า</div>
                 <div class="text-h6 font-weight-bold">
-                  {{ order.customerName }}
+                  {{ order?.customerName }}
                 </div>
               </v-col>
               <v-col cols="12" sm="4">
@@ -125,13 +125,13 @@
             <!-- Product List -->
             <div class="text-subtitle-2 font-weight-bold mb-3">
               <v-icon small left>mdi-shopping-outline</v-icon>
-              รายละเอียดสินค้า ({{ order.products.length }} รายการ)
+              รายละเอียดสินค้า ({{ order.products?.length || 0 }} รายการ)
             </div>
 
             <v-list class="pa-0">
               <!-- ✅ แก้จาก order.items → order.products ตาม JSON -->
               <div
-                v-for="(item, index) in order.products"
+                v-for="(item, index) in order.products || []"
                 :key="index"
                 class="mb-2"
               >
@@ -162,7 +162,7 @@
                   </v-list-item-content>
                 </v-list-item>
                 <v-divider
-                  v-if="index < order.products.length - 1"
+                  v-if="index < (order.products?.length || 0) - 1"
                   class="my-2"
                 ></v-divider>
               </div>
@@ -192,6 +192,7 @@ export default {
   methods: {
     async fetchOrders() {
       this.loading = true;
+      this.summary = null;
       try {
         const token = localStorage.getItem("token"); // ✅ ต้องส่ง token ด้วย
         const response = await axios.get("/api/v1/orders", {
@@ -199,9 +200,8 @@ export default {
         });
 
         const data = response.data.data;
-
-        // ✅ แยก summary และ orders ตรงๆ จาก response ไม่ต้อง transform
-        this.summary = data.summary;
+        // ✅ แยก summary และ orders จาก response โดยตรง
+        this.summary = data.summary || null;
         this.orders = data.orders || [];
       } catch (error) {
         console.error("Fetch Orders Error:", error);
@@ -244,6 +244,7 @@ export default {
       return map[status?.toLowerCase()] || "#616161";
     },
   },
+  // ✅ ลบ computed.orderSummary ออก เนื่องจาก API ส่ง summary มาให้แล้ว
 };
 </script>
 
